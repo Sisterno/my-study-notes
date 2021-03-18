@@ -1,6 +1,6 @@
 # Notas sobre desarrollo de backend
 
-## Informacion del sistema operativo
+### Informacion del sistema operativo
 
 Para obtener informacion del sistema operativo se puede utilizar el modulo 'os':
 
@@ -14,8 +14,59 @@ console.log('Type',os.type())
 console.log('SO release',os.release())
 console.log('user data',os.userInfo())
 ```
+### Manejo de directorios y archivos
 Tambien se puede ralizar el manje de directorios y archivos con el modulo 'fs':
 
 ```javascript
 const fs = require('fs')
+fs.makedir('x/y/z', {recursive:true},(err)=>{
+    if(err) {
+        return console.log(err)
+    }
+})
+fs.copyFile(...)
+```
+
+### Consola, utilidades y debugging
+
+Aparte de la console normal, tambien tenemos un objeto console.Console. Este objeto nos permite manejar todas las funciones de consola y ademas alterar la forma a salida en la que queremos mostrar estos.
+
+```javascript
+const fs = require("fs");
+
+const out = fs.createWriteStream("./out.log");
+const err = fs.createWriteStream("./err.log");
+
+const consoleFile = new console.Console(out, err);
+
+setInterval(() => {
+    consoleFile.log(new Date());
+    consoleFile.error(new Error("Ooops!"));
+}, 2000);
+```
+Hay otras formas de mandar mensaje aparte de console.log:
+```javascript
+console.info("hello world");
+console.warn("hello error");
+
+console.assert(42 == "42");
+console.assert(42 === "42");
+
+console.trace("hello");
+```
+Tambien podriamos incluir mensajes que solo aparecerian si estamos usando el debbug_log correcto, (el mensaje solo aparecera si usamos el comando NODE_DEBUG=foo node x.js):
+```javascript
+const util = require("util");
+const debuglog = util.debuglog("foo");
+
+debuglog("hello from foo");
+```
+Por ultimo, podemos usar el modulo 'util'.deprecate() para poder indicar que alguna funcion de nuestro proyecto esta con errores o que en una futura actualizacion podria ser eliminado.
+
+```javascript
+const util = require('util');
+const x = util.deprecate(() => {
+    ...
+}, 'mensaje de advertencia');
+x();
 ```
