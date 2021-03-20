@@ -70,3 +70,9 @@ const x = util.deprecate(() => {
 }, 'mensaje de advertencia');
 x();
 ```
+### Debuging
+Podemos usar **node --inspect** para realizar un mejor debuging de nuestra aplicacion. Este comande hace que node cree un servidor deonde podremos conectarnos con cualquier navegador. Esto permite el uso de herramientas de debuging del navegador, igual como si estubieramos haciendo debuging del frontend.
+
+
+### Cluster de procesos
+Al igual que un cluster de bases de datos, un cluster de procesos es hacer que un proceso que este corriendo en un hilo se replique para cada hilo de procesos que tiene el cpu, todos nocetados al mismo puerto. Con esto logramos que el procesador siempres este resolviendo solicitudes de manera paralela y ,en el caso de un servidor, que todos estos procesos usen el mismo puerto para las conexiones entrantes. 
