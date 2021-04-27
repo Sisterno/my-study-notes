@@ -41,4 +41,58 @@ app.listen(process.env.PORT,()=>{
 })
 ```
 Endpoint
-Para crear un nuevo endpoint, usamos nuestra instacia de express y definimos su empoint
+Para crear un nuevo endpoint, usamos nuestra instacia de express y definimos su endpoint.
+
+...
+
+## Middleware
+Hay 2 formas de añadir middleware en express.  
+1. Añadiendo un middleware con `app.use()`, este se ejecutara para cualquier peticion en cualquier endpoint:
+```ts
+app.use((req:Request,res:Response,next:any)=>{
+    console.log('consulta a '+ req.path); 
+    next(); 
+});
+```
+2. Añadiendo un middleware directo en el endpoint, este solo tendra efecto en el endpoint seleccionado:
+```ts
+router.get(
+    '/...',
+    validationHandler(object({ id: characterIdSchema }), 'params'), // middleware
+    ...
+)
+```
+### Manejo de errores con middlewares
+
+El manejo de errores para procesos sincronos ya esta implementado en en express.Pero, los errores asincronos no se capturaran automaticamente. Tenemos q capturar el error y mandarlo por el next(err).
+```ts
+app.get("/", function(req, res, next) {
+  fs.readFile("/file-does-not-exist", function(err, data) {
+    if (err) {
+      next(err); // Se debe pasar el error a Express.
+    } else {
+      res.send(data);
+    }
+  });
+});
+```
+
+### JOI y BOOM
+Paquetes q pertenecen originalmente al ecosistema de HAPI.
+JOI -> Object Schema Validation
+BOOM -> HTTP-frienly error objects
+
+### BOOM
+>Instalacion -> npm i @hapi/boom  
+>Recordar: boom ya viene con sus types para typescript :v
+
+### JOI
+>Paquete que originalmente pertenecia al ecosistema de Hapi. Actualmente es idependiente de este.  
+> ## Para que?  
+>Permite la validacion de esquemas de datos  de una api. Es un paquete que valida los datos recibidos por una api esten en un formato aceptable para su uso dentro del backend.
+> ## Importente
+> _id de mongo puede ser validado con:
+>  ```ts
+>  joi.string().regex(/[0-9a-fA-F]{24}/);
+>  ```
+
